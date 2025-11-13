@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeadHang - Hangman Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Home Screen -->
+    <div id="homeScreen" class="screen active">
+        <div class="container">
+            <div class="game-title">
+                <h1 class="title-main">DeadHang</h1>
+                <p class="title-sub">Can you save the stick figure?</p>
+            </div>
+
+            <div class="selection-panel">
+                <div class="selection-group">
+                    <label class="selection-label">📚 Category</label>
+                    <select class="selection-dropdown" id="categorySelect">
+                        <option value="programming">Programming</option>
+                        <option value="science">Science</option>
+                        <option value="history">History</option>
+                        <option value="geography">Geography</option>
+                        <option value="technology">Technology</option>
+                    </select>
+                </div>
+
+                <div class="selection-group">
+                    <label class="selection-label">⚡ Difficulty</label>
+                    <select class="selection-dropdown" id="difficultySelect">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="menu-buttons">
+                <button class="btn btn-play" id="playBtn">
+                    <span>🎮</span> Play Game
+                </button>
+                <button class="btn btn-how" id="howToPlayBtn">
+                    <span>📖</span> How to Play
+                </button>
+            </div>
+            
+            <div class="audio-controls">
+                <button class="audio-btn" id="audioBtn">
+                    <span class="audio-icon">🔊</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- How to Play Modal -->
+    <div id="howToPlayModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>How to Play</h2>
+            <div class="instructions">
+                <p>🎯 <strong>Objective:</strong> Guess the hidden word before the hangman is complete!</p>
+                <p>📝 <strong>Rules:</strong></p>
+                <ul>
+                    <li>Click on letters to make your guess</li>
+                    <li>Each wrong guess adds a part to the hangman</li>
+                    <li>You have 6 wrong guesses before game over</li>
+                    <li>Guess the complete word to win!</li>
+                </ul>
+                <p>💡 <strong>Tip:</strong> Start with common vowels like A, E, I, O, U</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="gameScreen" class="screen">
+        <div class="game-container">
+            <div class="game-header">
+                <button class="btn-back" id="backBtn">← Back</button>
+                <div class="game-info">
+                    <h2 class="game-score">Round: <span id="currentRound">1</span>/10</h2>
+                    <h2 class="game-score">Score: <span id="currentScore">0</span></h2>
+                    <h2 class="game-score">Lives: <span id="livesCount">6</span></h2>
+                    <h2 class="game-timer">Time: <span id="timer">0:00</span></h2>
+                </div>
+            </div>
+
+            <div class="category-display">
+                <span class="category-label">📚 Category:</span>
+                <span class="category-value" id="categoryDisplay">---</span>
+            </div>
+
+            <div class="hangman-visual">
+                <svg width="300" height="300" viewBox="0 0 300 300" id="hangmanSvg">
+                    <!-- Base -->
+                    <line x1="10" y1="280" x2="150" y2="280" stroke="#8B4513" stroke-width="4" class="hangman-part" id="base"/>
+                    <!-- Pole -->
+                    <line x1="50" y1="280" x2="50" y2="20" stroke="#8B4513" stroke-width="4" class="hangman-part" id="pole"/>
+                    <!-- Top -->
+                    <line x1="50" y1="20" x2="150" y2="20" stroke="#8B4513" stroke-width="4" class="hangman-part" id="top"/>
+                    <!-- Rope -->
+                    <line x1="150" y1="20" x2="150" y2="50" stroke="#8B4513" stroke-width="2" class="hangman-part" id="rope"/>
+                    <!-- Head -->
+                    <circle cx="150" cy="70" r="20" stroke="#FF6B6B" stroke-width="3" fill="none" class="hangman-part hidden" id="head"/>
+                    <!-- Body -->
+                    <line x1="150" y1="90" x2="150" y2="150" stroke="#FF6B6B" stroke-width="3" class="hangman-part hidden" id="body"/>
+                    <!-- Left Arm -->
+                    <line x1="150" y1="110" x2="120" y2="130" stroke="#FF6B6B" stroke-width="3" class="hangman-part hidden" id="leftArm"/>
+                    <!-- Right Arm -->
+                    <line x1="150" y1="110" x2="180" y2="130" stroke="#FF6B6B" stroke-width="3" class="hangman-part hidden" id="rightArm"/>
+                    <!-- Left Leg -->
+                    <line x1="150" y1="150" x2="130" y2="190" stroke="#FF6B6B" stroke-width="3" class="hangman-part hidden" id="leftLeg"/>
+                    <!-- Right Leg -->
+                    <line x1="150" y1="150" x2="170" y2="190" stroke="#FF6B6B" stroke-width="3" class="hangman-part hidden" id="rightLeg"/>
+                </svg>
+            </div>
+
+            <div class="word-display" id="wordDisplay"></div>
+
+            <div class="hint-section">
+                <button class="btn-hint" id="hintBtn">💡 Show Hint</button>
+                <div class="hint-display" id="hintDisplay"></div>
+            </div>
+
+            <div class="keyboard" id="keyboard"></div>
+
+            <div class="game-actions">
+                <button class="btn btn-restart" id="restartBtn">🔄 New Word</button>
+                <button class="btn btn-restart" id="skipBtn">⏭️ Skip Word</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Win/Lose Modal -->
+    <div id="gameOverModal" class="modal">
+        <div class="modal-content game-over-content">
+            <div id="gameOverMessage"></div>
+            <div class="educational-info" id="educationalInfo"></div>
+            <div class="game-over-buttons">
+                <button class="btn btn-play" id="nextWordBtn">Next Word</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Complete Modal -->
+    <div id="gameCompleteModal" class="modal">
+        <div class="modal-content game-complete-content">
+            <h1 class="complete-title">🎮 Game Complete! 🎮</h1>
+            <div class="final-stats">
+                <div class="stat-item">
+                    <div class="stat-label">Total Score</div>
+                    <div class="stat-value" id="finalScore">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Max Possible</div>
+                    <div class="stat-value">200</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Words Solved</div>
+                    <div class="stat-value" id="wordsSolved">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Accuracy</div>
+                    <div class="stat-value" id="accuracy">0%</div>
+                </div>
+            </div>
+            <div id="performanceMessage"></div>
+            <div class="game-over-buttons">
+                <button class="btn btn-play" id="playNewGameBtn">Play Again</button>
+                <button class="btn btn-how" id="homeFromCompleteBtn">Home</button>
+            </div>
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="bgMusic.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
