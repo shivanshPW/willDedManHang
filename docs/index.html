@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DeadHang - Hangman Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -73,61 +73,69 @@
         </div>
     </div>
 
-    <!-- Game Screen -->
+    <!-- Game Screen (Flattened Structure for Dual Layouts) -->
     <div id="gameScreen" class="screen">
         <div class="game-container">
-            <div class="game-header">
-                <button class="btn-back" id="backBtn">← Back</button>
-                <div class="game-info">
-                    <h2 class="game-score">Round: <span id="currentRound">1</span>/10</h2>
-                    <h2 class="game-score">Score: <span id="currentScore">0</span></h2>
-                    <h2 class="game-score">Lives: <span id="livesCount">6</span></h2>
-                    <h2 class="game-timer">Time: <span id="timer">0:00</span></h2>
+            <!-- 1. Header Area -->
+            <div class="game-area-header">
+                <div class="header-controls">
+                    <button class="btn-back" id="backBtn">Back</button>
+                </div>
+                <div class="game-stats">
+                    <div class="stat-box">Round: <span id="currentRound">1</span>/10</div>
+                    <div class="stat-box">Score: <span id="currentScore">0</span></div>
+                    <div class="stat-box">Lives: <span id="livesCount">6</span></div>
+                    <div class="stat-box">Time: <span id="timer">0:00</span></div>
                 </div>
             </div>
 
-            <div class="category-display">
-                <span class="category-label">📚 Category:</span>
-                <span class="category-value" id="categoryDisplay">---</span>
+            <!-- 2. Category Area -->
+            <div class="game-area-category">
+                <span class="cat-label">Category:</span>
+                <span class="cat-val" id="categoryDisplay">---</span>
             </div>
 
-            <div class="hangman-visual">
-                <svg width="300" height="300" viewBox="0 0 300 300" id="hangmanSvg">
-                    <!-- Base -->
-                    <line x1="10" y1="280" x2="150" y2="280" stroke="#8B4513" stroke-width="4" class="hangman-part" id="base"/>
-                    <!-- Pole -->
-                    <line x1="50" y1="280" x2="50" y2="20" stroke="#8B4513" stroke-width="4" class="hangman-part" id="pole"/>
-                    <!-- Top -->
-                    <line x1="50" y1="20" x2="150" y2="20" stroke="#8B4513" stroke-width="4" class="hangman-part" id="top"/>
-                    <!-- Rope -->
-                    <line x1="150" y1="20" x2="150" y2="50" stroke="#8B4513" stroke-width="2" class="hangman-part" id="rope"/>
-                    <!-- Head -->
-                    <circle cx="150" cy="70" r="20" stroke="#FF6B6B" stroke-width="3" fill="none" class="hangman-part hidden" id="head"/>
-                    <!-- Body -->
-                    <line x1="150" y1="90" x2="150" y2="150" stroke="#FF6B6B" stroke-width="3" class="hangman-part hidden" id="body"/>
-                    <!-- Left Arm -->
-                    <line x1="150" y1="110" x2="120" y2="130" stroke="#FF6B6B" stroke-width="3" class="hangman-part hidden" id="leftArm"/>
-                    <!-- Right Arm -->
-                    <line x1="150" y1="110" x2="180" y2="130" stroke="#FF6B6B" stroke-width="3" class="hangman-part hidden" id="rightArm"/>
-                    <!-- Left Leg -->
-                    <line x1="150" y1="150" x2="130" y2="190" stroke="#FF6B6B" stroke-width="3" class="hangman-part hidden" id="leftLeg"/>
-                    <!-- Right Leg -->
-                    <line x1="150" y1="150" x2="170" y2="190" stroke="#FF6B6B" stroke-width="3" class="hangman-part hidden" id="rightLeg"/>
-                </svg>
+            <!-- 3. Visual Area (Hangman) -->
+            <div class="game-area-visual">
+                <div class="visual-wrapper">
+                    <svg viewBox="0 0 300 300" id="hangmanSvg">
+                        <!-- Base/Pole -->
+                        <line x1="20" y1="280" x2="140" y2="280" class="draw-base"/>
+                        <line x1="80" y1="280" x2="80" y2="20" class="draw-base"/>
+                        <line x1="80" y1="20" x2="200" y2="20" class="draw-base"/>
+                        <line x1="200" y1="20" x2="200" y2="50" class="draw-rope"/>
+                        
+                        <!-- Body Parts -->
+                        <circle cx="200" cy="80" r="30" class="hangman-part hidden" id="head"/>
+                        <line x1="200" y1="110" x2="200" y2="190" class="hangman-part hidden" id="body"/>
+                        <line x1="200" y1="130" x2="160" y2="170" class="hangman-part hidden" id="leftArm"/>
+                        <line x1="200" y1="130" x2="240" y2="170" class="hangman-part hidden" id="rightArm"/>
+                        <line x1="200" y1="190" x2="170" y2="250" class="hangman-part hidden" id="leftLeg"/>
+                        <line x1="200" y1="190" x2="230" y2="250" class="hangman-part hidden" id="rightLeg"/>
+                    </svg>
+                </div>
             </div>
 
-            <div class="word-display" id="wordDisplay"></div>
-
-            <div class="hint-section">
-                <button class="btn-hint" id="hintBtn">💡 Show Hint</button>
-                <div class="hint-display" id="hintDisplay"></div>
+            <!-- 4. Word Display Area -->
+            <div class="game-area-word">
+                <div id="wordDisplay" class="word-slots"></div>
             </div>
 
-            <div class="keyboard" id="keyboard"></div>
+            <!-- 5. Hint Area -->
+            <div class="game-area-hint">
+                <button id="hintBtn" class="btn-hint">💡 Hint</button>
+                <div id="hintDisplay" class="hint-text"></div>
+            </div>
 
-            <div class="game-actions">
-                <button class="btn btn-restart" id="restartBtn">🔄 New Word</button>
-                <button class="btn btn-restart" id="skipBtn">⏭️ Skip Word</button>
+            <!-- 6. Keyboard Area -->
+            <div class="game-area-keyboard">
+                <div id="keyboard" class="keyboard-grid"></div>
+            </div>
+
+            <!-- 7. Actions Area -->
+            <div class="game-area-actions">
+                <button id="restartBtn" class="btn-action restart">Restart</button>
+                <button id="skipBtn" class="btn-action skip">Skip</button>
             </div>
         </div>
     </div>
@@ -151,10 +159,6 @@
                 <div class="stat-item">
                     <div class="stat-label">Total Score</div>
                     <div class="stat-value" id="finalScore">0</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">Max Possible</div>
-                    <div class="stat-value">200</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-label">Words Solved</div>
