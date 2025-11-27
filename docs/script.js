@@ -222,7 +222,7 @@ backBtn.addEventListener('click', () => {
     gameActive = false;
     clearInterval(timerInterval);
 });
-restartBtn.addEventListener('click', startNewRound);
+restartBtn.addEventListener('click', startNewGame);
 skipBtn.addEventListener('click', () => { if(gameActive) endGame(false); });
 document.getElementById('nextWordBtn').addEventListener('click', () => {
     gameOverModal.classList.remove('active');
